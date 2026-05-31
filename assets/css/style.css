@@ -1,0 +1,108 @@
+/* Estilos personalizados para o Anon Store */
+
+.product-card {
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid #dee2e6;
+    max-width: 200px;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.product-image {
+    height: 120px;
+    object-fit: cover;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.price {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #6f42c1;
+}
+
+.product-meta {
+    border-top: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+    padding: 0.75rem 0;
+    font-size: 0.85rem;
+}
+
+.btn-buy {
+    background-color: #212529;
+    color: white;
+    font-weight: 500;
+}
+
+.btn-buy:hover {
+    background-color: #343a40;
+    color: white;
+}
+
+/* Melhorar aparência dos filtros */
+.form-control:focus, 
+.form-select:focus {
+    border-color: #6f42c1;
+    box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.15);
+}
+
+/* Tema Escuro */
+body.dark-theme {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+body.dark-theme .bg-white {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0;
+}
+
+body.dark-theme .bg-light {
+    background-color: #1a1a1a !important;
+}
+
+body.dark-theme .text-dark {
+    color: #e0e0e0 !important;
+}
+
+body.dark-theme .text-muted {
+    color: #b0b0b0 !important;
+}
+
+body.dark-theme .border-top,
+body.dark-theme .border-bottom {
+    border-color: #444 !important;
+}
+
+body.dark-theme .card {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+body.dark-theme .form-control,
+body.dark-theme .form-select {
+    background-color: #3d3d3d;
+    color: #e0e0e0;
+    border-color: #555;
+}
+
+body.dark-theme .form-control:focus,
+body.dark-theme .form-select:focus {
+    background-color: #3d3d3d;
+    color: #e0e0e0;
+    border-color: #6f42c1;
+}
+
+body.dark-theme .btn-outline-dark {
+    color: #e0e0e0;
+    border-color: #e0e0e0;
+}
+
+body.dark-theme .btn-outline-dark:hover {
+    background-color: #e0e0e0;
+    color: #1a1a1a;
+}
