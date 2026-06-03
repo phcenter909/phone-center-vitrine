@@ -1,5 +1,35 @@
 const SHEET_URL = "https://opensheet.elk.sh/1vF0D_WJXH5RUC7liF3fbcZCrLvre_xEGFGTD3FDYq1U/Page1";
-const WHATSAPP_NUMBER = "5511982150000";
+
+// Seleção dinâmica do número do WhatsApp conforme dia/horário
+// Regra:
+// Sábado: 09:00 <= h < 14:00 -> 5584996775340, caso contrário -> 5584996775282
+// Domingo: sempre -> 5584996775282
+// Segunda-Sexta: 09:00 <= h < 18:00 -> 5584996775340, caso contrário -> 5584996775282
+
+function getWhatsappNumber(date = new Date()) {
+    const day = date.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const totalMinutes = date.getHours() * 60 + date.getMinutes();
+    const startBusiness = 9 * 60;      // 09:00
+    const endBusinessWeek = 18 * 60;   // 18:00
+    const endBusinessSat = 14 * 60;    // 14:00
+
+    if (day === 6) { // Saturday
+        if (totalMinutes >= startBusiness && totalMinutes < endBusinessSat) {
+            return '5584996775340';
+        }
+        return '5584996775282';
+    }
+
+    if (day === 0) { // Sunday
+        return '5584996775282';
+    }
+
+    // Monday - Friday
+    if (totalMinutes >= startBusiness && totalMinutes < endBusinessWeek) {
+        return '5584996775340';
+    }
+    return '5584996775282';
+}
 
 let allProducts = [];
 
@@ -46,11 +76,17 @@ function normalizeProducts(data) {
         marca: product.marcaId?.trim() || "Sem marca",
         cor: product.corDescricao?.trim() || "",
         memoria: product.gbDescricao?.trim() || "",
+        imei: product.imei?.trim() || "",
         estado: product.estadoProdutoDescricao?.trim() || "",
         sku: product.sku?.trim() || "",
         quantidade: parseInt(product.quantidade) || 0,
         fornecedor: product.fornecedorNome?.trim() || ""
     })).filter(p => p.disponivel && p.quantidade > 0);
+}
+
+function truncate(text, max) {
+    if (!text) return '';
+    return text.length > max ? text.slice(0, max) + '...' : text;
 }
 
 // Renderizar produtos com Bootstrap
@@ -76,20 +112,14 @@ function renderProducts(products) {
                     <img src="${imageUrl}" class="card-img-top product-image" alt="${product.nome_produto}">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">${product.nome_produto}</h5>
-                        <p class="card-text text-muted small flex-grow-1">${product.descricao}</p>
                         
                         <div class="product-meta mb-3">
-                            ${product.cor ? `<small class="d-block text-muted">Cor: ${product.cor}</small>` : ''}
-                            ${product.memoria ? `<small class="d-block text-muted">Memória: ${product.memoria}</small>` : ''}
                             ${product.estado ? `<small class="d-block text-muted">Estado: ${product.estado}</small>` : ''}
-                            ${product.fornecedor ? `<small class="d-block text-muted">Fornecedor: ${product.fornecedor}</small>` : ''}
-                            ${product.quantidade > 0 ? `<small class="d-block text-success"><i class="bi bi-check-circle"></i> ${product.quantidade} em estoque</small>` : '<small class="d-block text-danger">Fora de estoque</small>'}
+                            ${product.cor ? `<small class="d-block text-muted">Cor: ${product.cor}</small>` : ''}
+                            ${product.memoria ? `<small class="d-block text-muted">Armazenamento: ${product.memoria}</small>` : ''}
+                            ${product.imei ? `<small class="d-block text-muted">IMEI: ${product.imei.length > 4 ? '****' + product.imei.slice(-4) : product.imei}</small>` : ''}
                         </div>
-                        
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="price">R$ ${product.preco.toFixed(2)}</span>
-                        </div>
-                        
+                                                
                         <button onclick="buyProduct('${product.nome_produto}')" 
                                 class="btn btn-buy w-100">
                             <i class="bi bi-whatsapp me-2"></i> Comprar via WhatsApp
@@ -102,10 +132,12 @@ function renderProducts(products) {
     });
 }
 
+
 // Abrir WhatsApp
 window.buyProduct = function(nomeProduto) {
     const message = `Olá, tenho interesse no produto: ${nomeProduto}.`;
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    const number = getWhatsappNumber();
+    const whatsappUrl = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 };
 
@@ -131,7 +163,8 @@ function filterProducts() {
 
 function populateFilters() {
     const categories = [...new Set(allProducts.map(p => p.categoria))].sort();
-    const brands = [...new Set(allProducts.map(p => p.marca))].sort();
+    // Popular o filtro de marcas com opções fixas conforme solicitado
+    const brands = ['Iphone', 'Xiaomi'];
 
     const catSelect = document.getElementById('category-filter');
     const brandSelect = document.getElementById('brand-filter');
