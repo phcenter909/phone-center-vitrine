@@ -78,6 +78,8 @@ function normalizeProducts(data) {
         memoria: product.gbDescricao?.trim() || "",
         imei: product.imei?.trim() || "",
         estado: product.estadoProdutoDescricao?.trim() || "",
+        // armazenar o id do estado (ex: 8505 = Novo, 8507 = Semi novo)
+        estadoId: product.estadoProdutoId ? String(product.estadoProdutoId).trim() : "",
         sku: product.sku?.trim() || "",
         quantidade: parseInt(product.quantidade) || 0,
         fornecedor: product.fornecedorNome?.trim() || ""
@@ -152,8 +154,10 @@ function filterProducts() {
             product.nome_produto.toLowerCase().includes(searchTerm) ||
             product.descricao.toLowerCase().includes(searchTerm);
         
-        const matchesCategory = !categoryFilter || product.categoria === categoryFilter;
-        const matchesBrand = !brandFilter || product.marca === brandFilter;
+        // Comparar pela propriedade 'estadoId' usando igualdade exata
+        const matchesCategory = !categoryFilter || product.estadoId === categoryFilter;
+        // Se 'Iphone' for selecionado, mostrar todas as opções
+        const matchesBrand = !brandFilter || brandFilter === 'Iphone' || product.marca === brandFilter;
 
         return matchesSearch && matchesCategory && matchesBrand;
     });
@@ -162,7 +166,11 @@ function filterProducts() {
 }
 
 function populateFilters() {
-    const categories = [...new Set(allProducts.map(p => p.categoria))].sort();
+    // Usar categorias fixas: valores correspondem a estadoProdutoId na planilha
+    const categories = [
+        { id: '8505', label: 'Novo' },
+        { id: '8507', label: 'Semi novo' }
+    ];
     // Popular o filtro de marcas com opções fixas conforme solicitado
     const brands = ['Iphone', 'Xiaomi'];
 
@@ -171,8 +179,8 @@ function populateFilters() {
 
     categories.forEach(cat => {
         const opt = document.createElement('option');
-        opt.value = cat;
-        opt.textContent = cat;
+        opt.value = cat.id;
+        opt.textContent = cat.label;
         catSelect.appendChild(opt);
     });
 
