@@ -69,6 +69,8 @@ function normalizeProducts(data) {
         id: product.id?.trim() || "",
         nome_produto: product.aparelhoDescricao?.trim() || "Sem nome",
         fotos: product.foto?.trim() || "",
+        // campo recebido da planilha com a URL da foto (JSON)
+        fotoUrl: product.fotoUrl?.trim() || "",
         descricao: product.descricao?.trim() || "",
         preco: parseFloat(product.valorVenda) || parseFloat(product.valorCusto) || 0,
         disponivel: product.disponibilidade?.toLowerCase().includes("disponível"),
@@ -106,7 +108,8 @@ function renderProducts(products) {
     }
 
     products.forEach(product => {
-        const imageUrl = product.fotos || 'https://picsum.photos/400';
+        const placeholder = 'https://images.unsplash.com/photo-1655627617149-d811dc052d16?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZW1wdHklMjBwaG9uZXxlbnwwfHwwfHx8MA%3D%3D';
+        const imageUrl = product.fotoUrl || product.fotos || placeholder;
         
         const cardHTML = `
             <div class="col">
