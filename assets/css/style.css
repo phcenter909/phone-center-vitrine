@@ -1,108 +1,178 @@
-/* Estilos personalizados para o Anon Store */
+/* Paleta de Cores Phone House */
+:root {
+    --primary: #F2F2F2;
+    --dark-navy: #0424D9;
+    --very-dark-navy: #0424D9;
+    --light-navy: #0424D9;
+    --gray-blue: #8A91A6;
+}
+
+/* Logo Header */
+.logo-header {
+    height: 300px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Estilos personalizados para Phone House */
+body {
+    background-color: var(--primary);
+    color: var(--dark-navy);
+}
+
+header {
+    background-color: var(--dark-navy) !important;
+    color: var(--primary);
+    border-bottom: 3px solid var(--light-navy);
+}
+
+header h1, header p {
+    color: var(--primary);
+}
 
 .product-card {
     transition: all 0.3s ease;
     height: 100%;
-    border: 1px solid #dee2e6;
-    max-width: 250px; /* aumentou 25% */
+    border: 1px solid var(--gray-blue);
+    background-color: var(--primary);
 }
 
 .product-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 10px 25px rgba(7, 28, 89, 0.15) !important;
+    border-color: var(--dark-navy);
 }
 
 .product-image {
-    height: 113px; /* ~25% maior que 90px */
+    height: 113px;
     object-fit: cover;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--gray-blue);
 }
 
 .price {
-    font-size: 1.25rem; /* aumentado 25% */
+    font-size: 1.25rem;
     font-weight: 700;
-    color: #6f42c1;
+    color: var(--dark-navy);
 }
 
 .product-meta {
-    border-top: 1px solid #e9ecef;
-    border-bottom: 1px solid #e9ecef;
+    border-top: 1px solid var(--gray-blue);
+    border-bottom: 1px solid var(--gray-blue);
     padding: 0.5rem 0;
     font-size: 0.75rem;
+    color: var(--gray-blue);
 }
 
 .btn-buy {
-    background-color: #212529;
-    color: white;
+    background-color: var(--dark-navy);
+    color: var(--primary);
     font-weight: 500;
+    border: 1px solid var(--dark-navy);
 }
 
 .btn-buy:hover {
-    background-color: #343a40;
-    color: white;
+    background-color: var(--light-navy);
+    color: var(--primary);
+    border-color: var(--light-navy);
 }
 
-/* Melhorar aparência dos filtros */
-.form-control:focus, 
+.btn-success {
+    background-color: var(--dark-navy) !important;
+    border-color: var(--dark-navy) !important;
+    color: var(--primary);
+}
+
+.btn-success:hover {
+    background-color: var(--light-navy) !important;
+    border-color: var(--light-navy) !important;
+}
+
+.btn-outline-success {
+    color: var(--dark-navy);
+    border-color: var(--dark-navy);
+}
+
+.btn-outline-success:hover {
+    background-color: var(--dark-navy);
+    color: var(--primary);
+    border-color: var(--dark-navy);
+}
+
+/* Inputs e Selects */
+.form-control,
+.form-select {
+    background-color: var(--primary);
+    color: var(--dark-navy);
+    border-color: var(--gray-blue);
+}
+
+.form-control:focus,
 .form-select:focus {
-    border-color: #6f42c1;
-    box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.15);
+    background-color: var(--primary);
+    color: var(--dark-navy);
+    border-color: var(--dark-navy);
+    box-shadow: 0 0 0 0.25rem rgba(7, 28, 89, 0.15);
 }
 
-/* Tema Escuro */
+.form-control::placeholder {
+    color: var(--gray-blue);
+}
+
+/* Footers e Cards */
+footer {
+    background-color: var(--primary) !important;
+    border-top: 2px solid var(--dark-navy);
+    color: var(--dark-navy);
+}
+
+.card {
+    background-color: var(--primary);
+    border-color: var(--gray-blue);
+    color: var(--dark-navy);
+}
+
+.card-title {
+    color: var(--dark-navy);
+    font-weight: 600;
+}
+
+/* Texto e Cores */
+.text-muted {
+    color: var(--gray-blue) !important;
+}
+
+.text-dark {
+    color: var(--dark-navy) !important;
+}
+
+/* Remove Dark Theme Styles */
 body.dark-theme {
-    background-color: #1a1a1a;
-    color: #e0e0e0;
+    background-color: var(--primary);
+    color: var(--dark-navy);
 }
 
 body.dark-theme .bg-white {
-    background-color: #2d2d2d !important;
-    color: #e0e0e0;
+    background-color: var(--primary) !important;
+    color: var(--dark-navy) !important;
 }
 
 body.dark-theme .bg-light {
-    background-color: #1a1a1a !important;
+    background-color: var(--primary) !important;
 }
 
 body.dark-theme .text-dark {
-    color: #e0e0e0 !important;
+    color: var(--dark-navy) !important;
 }
 
 body.dark-theme .text-muted {
-    color: #b0b0b0 !important;
-}
-
-body.dark-theme .border-top,
-body.dark-theme .border-bottom {
-    border-color: #444 !important;
+    color: var(--gray-blue) !important;
 }
 
 body.dark-theme .card {
-    background-color: #2d2d2d;
-    border-color: #444;
-    color: #e0e0e0;
-}
-
-body.dark-theme .form-control,
-body.dark-theme .form-select {
-    background-color: #3d3d3d;
-    color: #e0e0e0;
-    border-color: #555;
-}
-
-body.dark-theme .form-control:focus,
-body.dark-theme .form-select:focus {
-    background-color: #3d3d3d;
-    color: #e0e0e0;
-    border-color: #6f42c1;
-}
-
-body.dark-theme .btn-outline-dark {
-    color: #e0e0e0;
-    border-color: #e0e0e0;
-}
-
-body.dark-theme .btn-outline-dark:hover {
-    background-color: #e0e0e0;
-    color: #1a1a1a;
+    background-color: var(--primary);
+    border-color: var(--gray-blue);
+    color: var(--dark-navy);
 }

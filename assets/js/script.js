@@ -33,36 +33,6 @@ function getWhatsappNumber(date = new Date()) {
 
 let allProducts = [];
 
-// Tema escuro
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    applyTheme(savedTheme);
-}
-
-function applyTheme(theme) {
-    const html = document.documentElement;
-    const body = document.body;
-    const themeToggle = document.getElementById('theme-toggle');
-    
-    if (theme === 'dark') {
-        body.classList.add('dark-theme');
-        html.setAttribute('data-bs-theme', 'dark');
-        themeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
-    } else {
-        body.classList.remove('dark-theme');
-        html.setAttribute('data-bs-theme', 'light');
-        themeToggle.innerHTML = '<i class="bi bi-moon-stars"></i>';
-    }
-    
-    localStorage.setItem('theme', theme);
-}
-
-function toggleTheme() {
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    applyTheme(newTheme);
-}
-
 // Normalização dos dados
 function normalizeProducts(data) {
     return data.map(product => ({
@@ -107,28 +77,49 @@ function renderProducts(products) {
         return;
     }
 
-    products.forEach(product => {
+    const seen = new Set();
+    const distinctProducts = products
+        .filter(product => !product.nome_produto.toLowerCase().includes('bateria'))
+        .filter(product => {
+        const key = `${product.nome_produto}|${product.estado}|${product.memoria}`;
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.add(key);
+        return true;
+    });
+
+    distinctProducts.sort((a, b) => a.nome_produto.localeCompare(b.nome_produto));
+
+    distinctProducts.forEach(product => {
         const placeholder = 'https://images.unsplash.com/photo-1655627617149-d811dc052d16?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZW1wdHklMjBwaG9uZXxlbnwwfHwwfHx8MA%3D%3D';
         const imageUrl = product.fotoUrl || product.fotos || placeholder;
-        
+
         const cardHTML = `
-            <div class="col">
-                <div class="card product-card h-100 shadow-sm">
-                    <img src="${imageUrl}" class="card-img-top product-image" alt="${product.nome_produto}">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">${product.nome_produto}</h5>
-                        
-                        <div class="product-meta mb-3">
-                            ${product.estado ? `<small class="d-block text-muted">Estado: ${product.estado}</small>` : ''}
-                            ${product.cor ? `<small class="d-block text-muted">Cor: ${product.cor}</small>` : ''}
-                            ${product.memoria ? `<small class="d-block text-muted">Armazenamento: ${product.memoria}</small>` : ''}
-                            ${product.imei ? `<small class="d-block text-muted">IMEI: ${product.imei.length > 4 ? '****' + product.imei.slice(-4) : product.imei}</small>` : ''}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card shadow-sm h-100 my-2">
+                    <div class="row g-0 h-100">
+                        <div class="col-md-5">
+                            <img src="${imageUrl}" class="img-fluid rounded-start product-image" alt="${product.nome_produto}" style="object-fit: cover; height: 100%;">
                         </div>
-                                                
-                        <button onclick="buyProduct('${product.nome_produto}')" 
-                                class="btn btn-buy w-100">
-                            <i class="bi bi-whatsapp me-2"></i> Comprar via WhatsApp
-                        </button>
+                        <div class="col-md-7">
+                            <div class="card-body d-flex flex-column h-100">
+                                <h5 class="card-title">${product.nome_produto}</h5>
+                                <div class="product-meta mb-3 small text-muted">
+                                    ${product.estado ? `<div>Estado: ${product.estado}</div>` : ''}
+                                    ${product.memoria ? `<div>Armazenamento: ${product.memoria}</div>` : ''}
+                                </div>
+
+
+                                <div class="mt-auto">
+                                    <!-- <h6 class="text-success mb-2">R$ ${product.preco.toFixed(2)}</h6> -->
+                                    <button onclick="buyProduct('${product.nome_produto}', '${product.descricao}', '${product.estado}', '${product.memoria}')"
+                                            class="btn btn-success btn-sm w-100">
+                                        <i class="bi bi-whatsapp me-2"></i> Comprar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -139,8 +130,20 @@ function renderProducts(products) {
 
 
 // Abrir WhatsApp
-window.buyProduct = function(nomeProduto) {
-    const message = `Olá, tenho interesse no produto: ${nomeProduto}.`;
+window.buyProduct = function(nomeProduto, descricao, estado, memoria) {
+    let mensagemProduto = `*${nomeProduto}*`;
+    if (descricao) mensagemProduto += `\n${descricao}`;
+    if (estado) mensagemProduto += `\nEstado: ${estado}`;
+    if (memoria) mensagemProduto += `\nArmazenamento: ${memoria}`;
+
+    const message = `Eu vim pelo Site\n\nOlá, tenho interesse no seguinte produto:\n\n${mensagemProduto}`;
+    const number = getWhatsappNumber();
+    const whatsappUrl = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+};
+
+window.askForXiaomi = function() {
+    const message = `Eu vim pelo Site\n\nOlá, estou procurando um Xiaomi. Vocês têm disponível?`;
     const number = getWhatsappNumber();
     const whatsappUrl = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -150,19 +153,15 @@ window.buyProduct = function(nomeProduto) {
 function filterProducts() {
     const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
     const categoryFilter = document.getElementById('category-filter').value;
-    const brandFilter = document.getElementById('brand-filter').value;
 
     const filtered = allProducts.filter(product => {
-        const matchesSearch = !searchTerm || 
+        const matchesSearch = !searchTerm ||
             product.nome_produto.toLowerCase().includes(searchTerm) ||
             product.descricao.toLowerCase().includes(searchTerm);
-        
-        // Comparar pela propriedade 'estadoId' usando igualdade exata
-        const matchesCategory = !categoryFilter || product.estadoId === categoryFilter;
-        // Se 'Iphone' for selecionado, mostrar todas as opções
-        const matchesBrand = !brandFilter || brandFilter === 'Iphone' || product.marca === brandFilter;
 
-        return matchesSearch && matchesCategory && matchesBrand;
+        const matchesCategory = !categoryFilter || product.estadoId === categoryFilter;
+
+        return matchesSearch && matchesCategory;
     });
 
     renderProducts(filtered);
@@ -174,24 +173,14 @@ function populateFilters() {
         { id: '8505', label: 'Novo' },
         { id: '8507', label: 'Semi novo' }
     ];
-    // Popular o filtro de marcas com opções fixas conforme solicitado
-    const brands = ['Iphone', 'Xiaomi'];
 
     const catSelect = document.getElementById('category-filter');
-    const brandSelect = document.getElementById('brand-filter');
 
     categories.forEach(cat => {
         const opt = document.createElement('option');
         opt.value = cat.id;
         opt.textContent = cat.label;
         catSelect.appendChild(opt);
-    });
-
-    brands.forEach(brand => {
-        const opt = document.createElement('option');
-        opt.value = brand;
-        opt.textContent = brand;
-        brandSelect.appendChild(opt);
     });
 }
 
@@ -205,22 +194,18 @@ function debounce(fn, delay) {
 
 // Inicialização
 async function init() {
-    initTheme();
-    
     try {
         const response = await fetch(SHEET_URL);
         const data = await response.json();
-        
+
         allProducts = normalizeProducts(data);
-        
+
         populateFilters();
         renderProducts(allProducts);
 
         // Eventos
         document.getElementById('search-input').addEventListener('input', debounce(filterProducts, 300));
         document.getElementById('category-filter').addEventListener('change', filterProducts);
-        document.getElementById('brand-filter').addEventListener('change', filterProducts);
-        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 
     } catch (error) {
         console.error(error);

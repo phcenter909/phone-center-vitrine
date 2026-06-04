@@ -17,16 +17,12 @@
 <body class="bg-light">
     
     <!-- Header -->
-    <header class="bg-white shadow-sm sticky-top theme-light" id="header">
+    <header class="bg-white shadow-sm sticky-top" id="header">
         <div class="container py-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h1 class="h3 fw-bold mb-0 text-dark">PhStore</h1>
-                    <p class="text-muted small mb-0">Produtos direto da planilha</p>
-                </div>
-                <button id="theme-toggle" class="btn btn-outline-dark" title="Alternar tema">
-                    <i class="bi bi-moon-stars"></i>
-                </button>
+            <div class="text-center">
+                <img src="assets/logo_ph.png" alt="Phone House Logo" class="logo-header" style="margin-bottom: -65px; margin-top: -70px;">
+                <h1 class="h3 fw-bold mb-0 text-dark">Phone House</h1>
+                <p class="text-muted small mb-0">Especialistas em smartphones, acessórios e mais!</p>
             </div>
         </div>
     </header>
@@ -36,8 +32,8 @@
         <!-- Filtros -->
         <div class="row g-3 mb-5">
             <div class="col-md-6">
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     id="search-input"
                     class="form-control form-control-lg"
                     placeholder="🔍 Buscar produtos..."
@@ -49,14 +45,14 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <select id="brand-filter" class="form-select form-select-lg">
-                    <option value="">Todas as marcas</option>
-                </select>
+                <button class="btn btn-outline-success btn-lg w-100" onclick="askForXiaomi()">
+                    <i class="bi bi-whatsapp me-2"></i> Procura um Xiaomi?
+                </button>
             </div>
         </div>
 
         <!-- Grid de Produtos -->
-        <div id="products-grid" class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4" data-products-grid>
+        <div id="products-grid" class="row g-4" data-products-grid>
             <!-- Produtos carregados via JavaScript -->
         </div>
 
