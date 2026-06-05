@@ -7,9 +7,10 @@
     --gray-blue: #8A91A6;
 }
 
+
 /* Logo Header */
 .logo-header {
-    height: 300px;
+    height: 200px;
     width: auto;
     object-fit: contain;
     display: block;
