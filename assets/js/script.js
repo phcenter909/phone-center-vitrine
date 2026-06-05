@@ -63,6 +63,34 @@ function truncate(text, max) {
     return text.length > max ? text.slice(0, max) + '...' : text;
 }
 
+function getProductImagePath(nomeProduto) {
+    const normalized = nomeProduto?.toUpperCase().trim() || '';
+    const imageMap = {
+        'IPHONE 11': 'assets/IPhones/iPhone 11/iPhone 11/ip11.png',
+        'IPHONE 11 PRO': 'assets/IPhones/iPhone 11/iPhone 11 Pro/iph11pro.jpg',
+        'IPHONE 11 PRO MAX': 'assets/IPhones/iPhone 11/iPhone 11 Pro Max/iph11pro.jpg',
+        'IPHONE 12': 'assets/IPhones/iPhone 12/iPhone 12/image.png',
+        'IPHONE 12 PRO': 'assets/IPhones/iPhone 12/iPhone 12 Pro/image.png',
+        'IPHONE 12 PRO MAX': 'assets/IPhones/iPhone 12/iPhone 12 Pro Max/image.png',
+        'IPHONE 13': 'assets/IPhones/iPhone 13/iPhone 13/image.png',
+        'IPHONE 13 PRO': 'assets/IPhones/iPhone 13/iPhone 13 Pro/image.png',
+        'IPHONE 13 PRO MAX': 'assets/IPhones/iPhone 13/iPhone 13 Pro Max/image.png',
+        'IPHONE 14': 'assets/IPhones/iPhone 14/iPhone 14/image.png',
+        'IPHONE 14 PLUS': 'assets/IPhones/iPhone 14/iPhone 14 Plus/image.png',
+        'IPHONE 14 PRO': 'assets/IPhones/iPhone 14/iPhone 14 Pro/image.png',
+        'IPHONE 14 PRO MAX': 'assets/IPhones/iPhone 14/iPhone 14 Pro Max/image.png',
+        'IPHONE 15': 'assets/IPhones/iPhone 15/iPhone 15/image.png',
+        'IPHONE 15 PLUS': 'assets/IPhones/iPhone 15/iPhone 15 Plus/image.png',
+        'IPHONE 15 PRO': 'assets/IPhones/iPhone 15/iPhone 15 Pro/image.png',
+        'IPHONE 15 PRO MAX': 'assets/IPhones/iPhone 15/iPhone 15 Pro Max/image.png',
+        'IPHONE 16': 'assets/IPhones/iPhone 16/iPhone 16/image.png',
+        'IPHONE 16 PRO': 'assets/IPhones/iPhone 16/iPhone 16 Pro/image.png',
+        'IPHONE 16 PRO MAX': 'assets/IPhones/iPhone 16/iPhone 16 Pro Max/image.png',
+    };
+
+    return imageMap[normalized] || '';
+}
+
 // Renderizar produtos com Bootstrap
 function renderProducts(products) {
     const grid = document.getElementById('products-grid');
@@ -93,14 +121,15 @@ function renderProducts(products) {
 
     distinctProducts.forEach(product => {
         const placeholder = 'https://images.unsplash.com/photo-1655627617149-d811dc052d16?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZW1wdHklMjBwaG9uZXxlbnwwfHwwfHx8MA%3D%3D';
-        const imageUrl = product.fotoUrl || product.fotos || placeholder;
+        const localImage = getProductImagePath(product.nome_produto);
+        const imageUrl = product.fotoUrl || product.fotos || localImage || placeholder;
 
         const cardHTML = `
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card shadow-sm h-100 my-2">
                     <div class="row g-0 h-100">
                         <div class="col-md-5">
-                            <img src="${imageUrl}" class="img-fluid rounded-start product-image" alt="${product.nome_produto}" style="object-fit: cover; height: 100%;">
+                            <img src="${imageUrl}" class="img-fluid rounded-start product-image" alt="${product.nome_produto}" style="object-fit: cover; height: 100%;" onerror="this.onerror=null; this.src='${placeholder}';">
                         </div>
                         <div class="col-md-7">
                             <div class="card-body d-flex flex-column h-100">
