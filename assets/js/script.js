@@ -185,9 +185,8 @@ function filterProducts() {
 
     const filtered = allProducts.filter(product => {
         const matchesSearch = !searchTerm ||
-            product.nome_produto.toLowerCase().includes(searchTerm) ||
-            product.descricao.toLowerCase().includes(searchTerm);
-
+            product.nome_produto.toLowerCase().includes(searchTerm) 
+            
         const matchesCategory = !categoryFilter || product.estadoId === categoryFilter;
 
         return matchesSearch && matchesCategory;
