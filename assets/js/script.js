@@ -28,8 +28,8 @@ function getWhatsappNumber() {
   const END_WEEKDAY = 18 * 60;      // 18:00
   const END_SATURDAY = 14 * 60;     // 14:00
 
-  const MAIN_NUMBER = '5584996775340';
-  const SUPPORT_NUMBER = '5584998035100';
+  const MAIN_NUMBER = '558499284842'; // Leticia
+  const SUPPORT_NUMBER = '558498035100'; // Lavinia
 
  let isBusinessHours = false;
 
