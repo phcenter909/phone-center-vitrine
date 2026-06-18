@@ -35,6 +35,8 @@ header h1, header p {
 }
 
 .product-card {
+    display: flex;
+    flex-direction: column;
     transition: all 0.3s ease;
     height: 100%;
     border: 1px solid var(--gray-blue);
@@ -49,14 +51,10 @@ header h1, header p {
 
 .product-image {
     height: 113px;
-    object-fit: cover;
-    border-bottom: 1px solid var(--gray-blue);
-}
-
-.price {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--dark-navy);
+    width: 100%;
+    object-fit: contain;
+    margin-top: .5rem;
+    margin-bottom: .2rem;
 }
 
 .product-meta {
@@ -176,4 +174,50 @@ body.dark-theme .card {
     background-color: var(--primary);
     border-color: var(--gray-blue);
     color: var(--dark-navy);
+}
+
+/* Sidebar de filtros */
+.sticky-top {
+    top: 20px;
+}
+
+.card.border-dark {
+    border-radius: 1rem;
+}
+
+.card-body h6 {
+    flex:1;
+    letter-spacing: .05rem;
+}
+
+/* Mobile */
+@media (max-width: 991.98px) {
+    .sticky-top {
+        position: static !important;
+    }
+}
+
+/* Sidebar Desktop */
+.sticky-top {
+    top: 20px;
+}
+
+.card.border-dark {
+    border-radius: 1rem;
+}
+
+/* Offcanvas */
+.offcanvas {
+    max-width: 320px;
+}
+
+.offcanvas-body h6 {
+    letter-spacing: .05rem;
+}
+
+/* Mobile */
+@media (max-width: 991.98px) {
+    .sticky-top {
+        position: static !important;
+    }
 }
